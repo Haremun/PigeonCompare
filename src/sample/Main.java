@@ -10,21 +10,20 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
 
     private List<String> pigeons;
+    private List<String> equalsPigeons;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -34,15 +33,39 @@ public class Main extends Application {
         primaryStage.show();
 
         pigeons = new ArrayList<>();
+        equalsPigeons = new ArrayList<>();
 
-        ListView listView = (ListView) root.lookup("#listView");
+        ListView<String> listEqualsPigeons = (ListView<String>) root.lookup("#pigeonsEquals");
+        ListView<String> listView = (ListView<String>) root.lookup("#listView");
+        
         TextArea textArea = (TextArea) root.lookup("#textArea");
         Button btnCompare = (Button) root.lookup("#btnCompare");
         btnCompare.setAlignment(Pos.CENTER);
         btnCompare.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(textArea.getText());
+                equalsPigeons.clear();
+
+                BufferedReader bufferedReader = new BufferedReader(new StringReader(textArea.getText()));
+                String line;
+                int equalsCount = 0;
+                try {
+                    while ((line = bufferedReader.readLine()) != null) {
+                        for (int i = 0; i < pigeons.size(); i++) {
+                            if (pigeons.get(i).equals(line)) {
+                                equalsPigeons.add(line);
+                                equalsCount++;
+                                break;
+                            }
+                        }
+                    }
+
+                    ObservableList<String> observableListEquals = FXCollections.observableArrayList(equalsPigeons);
+                    listEqualsPigeons.setItems(observableListEquals);
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+
             }
         });
 
@@ -52,17 +75,14 @@ public class Main extends Application {
             BufferedReader br = new BufferedReader(new FileReader(file));
 
             String st;
-            StringBuilder builder = new StringBuilder();
             while ((st = br.readLine()) != null) {
-                builder.append(st);
-                builder.append("\n");
                 pigeons.add(st);
             }
             ObservableList<String> observableList = FXCollections.observableArrayList(pigeons);
             listView.setItems(observableList);
 
-        } catch (IOException e) {
-
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
 
     }

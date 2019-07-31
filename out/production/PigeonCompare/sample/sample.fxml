@@ -27,6 +27,9 @@
 
         />
         <VBox>
+            <style>
+                -fx-alignment: center ;
+            </style>
             <TextArea
                     fx:id="textArea"
                     prefHeight="100"
@@ -40,12 +43,14 @@
                 <Label
                         text="Pigeons count: "/>
                 <Label
+                        fx:id="pigeonCount"
                         text="00"/>
             </HBox>
             <HBox>
                 <Label
                         text="Pigeons found: "/>
                 <Label
+                        fx:id="pigeonsFound"
                         text="00"
                         textFill="#f00"
                 />
@@ -54,7 +59,7 @@
         </VBox>
 
         <ListView
-                fx:id="test"
+                fx:id="pigeonsEquals"
                 prefHeight="580"
                 prefWidth="200"
         />
