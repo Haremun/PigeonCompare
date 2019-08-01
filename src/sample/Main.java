@@ -9,12 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ public class Main extends Application {
 
     private List<String> pigeons;
     private List<String> equalsPigeons;
+    private List<String> pigeonsFound;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -34,10 +33,20 @@ public class Main extends Application {
 
         pigeons = new ArrayList<>();
         equalsPigeons = new ArrayList<>();
+        pigeonsFound = new ArrayList<>();
 
         ListView<String> listEqualsPigeons = (ListView<String>) root.lookup("#pigeonsEquals");
         ListView<String> listView = (ListView<String>) root.lookup("#listView");
-        
+
+        listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new PigeonsCell(pigeonsFound);
+            }
+        });
+        //listView.getCellFactory().call(null);
+        Label labelPigeonCount = (Label) root.lookup("#pigeonCount");
+        Label labelPigeonsFound = (Label) root.lookup("#pigeonsFound");
         TextArea textArea = (TextArea) root.lookup("#textArea");
         Button btnCompare = (Button) root.lookup("#btnCompare");
         btnCompare.setAlignment(Pos.CENTER);
@@ -48,17 +57,21 @@ public class Main extends Application {
 
                 BufferedReader bufferedReader = new BufferedReader(new StringReader(textArea.getText()));
                 String line;
-                int equalsCount = 0;
+                int linesCount = 0;
                 try {
                     while ((line = bufferedReader.readLine()) != null) {
                         for (int i = 0; i < pigeons.size(); i++) {
                             if (pigeons.get(i).equals(line)) {
                                 equalsPigeons.add(line);
-                                equalsCount++;
+                                pigeonsFound.add(line);
+                                listView.refresh();
                                 break;
                             }
                         }
+                        linesCount++;
                     }
+                    labelPigeonCount.setText(String.valueOf(linesCount));
+                    labelPigeonsFound.setText(String.valueOf(equalsPigeons.size()));
 
                     ObservableList<String> observableListEquals = FXCollections.observableArrayList(equalsPigeons);
                     listEqualsPigeons.setItems(observableListEquals);
@@ -68,7 +81,6 @@ public class Main extends Application {
 
             }
         });
-
 
         try {
             File file = new File("C:\\pigeons.txt");
