@@ -29,12 +29,17 @@
         <VBox>
             <style>
                 -fx-alignment: center ;
+                -fx-padding: 5px;
+                -fx-border-insets: 5px;
+                -fx-background-insets: 5px;
             </style>
             <TextArea
                     fx:id="textArea"
                     prefHeight="100"
                     prefWidth="300"
-            />
+            >
+            </TextArea>
+
             <Button
                     fx:id="btnCompare"
                     alignment="CENTER"
@@ -44,16 +49,27 @@
                         text="Pigeons count: "/>
                 <Label
                         fx:id="pigeonCount"
-                        text="00"/>
+                        text="00">
+                    <style>
+                        -fx-font-weight: bold;
+                        -fx-font-size: 14px;
+                    </style>
+                </Label>
             </HBox>
-            <HBox>
+            <HBox
+            alignment="BASELINE_CENTER">
                 <Label
                         text="Pigeons found: "/>
                 <Label
                         fx:id="pigeonsFound"
                         text="00"
                         textFill="#f00"
-                />
+                >
+                    <style>
+                        -fx-font-weight: bold;
+                        -fx-font-size: 18px;
+                    </style>
+                </Label>
             </HBox>
 
         </VBox>

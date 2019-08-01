@@ -27,7 +27,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Pigeon compare");
         primaryStage.setScene(new Scene(root, 1000, 600));
         primaryStage.show();
 
@@ -75,6 +75,9 @@ public class Main extends Application {
 
                     ObservableList<String> observableListEquals = FXCollections.observableArrayList(equalsPigeons);
                     listEqualsPigeons.setItems(observableListEquals);
+
+                    textArea.selectAll();
+                    textArea.requestFocus();
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
