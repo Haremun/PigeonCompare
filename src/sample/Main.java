@@ -59,11 +59,16 @@ public class Main extends Application {
                 String line;
                 int linesCount = 0;
                 try {
+                    line = bufferedReader.readLine();
                     while ((line = bufferedReader.readLine()) != null) {
+                        String tmp = line.substring(29);
+                        int tabIndex = tmp.indexOf("\t");
+                        String finalString = tmp.substring(0, tabIndex);
+                        System.out.println(finalString);
                         for (int i = 0; i < pigeons.size(); i++) {
-                            if (pigeons.get(i).equals(line)) {
-                                equalsPigeons.add(line);
-                                pigeonsFound.add(line);
+                            if (pigeons.get(i).equals(finalString)) {
+                                equalsPigeons.add(finalString);
+                                pigeonsFound.add(finalString);
                                 listView.refresh();
                                 break;
                             }
@@ -87,7 +92,7 @@ public class Main extends Application {
 
         try {
             File file = new File("C:\\pigeons.txt");
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
 
             String st;
             while ((st = br.readLine()) != null) {
