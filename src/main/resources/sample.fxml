@@ -1,0 +1,52 @@
+<?import javafx.scene.control.*?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.VBox?>
+<HBox fx:controller="pl.mwgrogowo.Controller" xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT">
+    <style>
+        -fx-padding: 10;
+        -fx-border-style: solid inside;
+        -fx-border-width: 2;
+        -fx-border-insets: 5;
+        -fx-border-radius: 5;
+        -fx-border-color: blue;
+    </style>
+    <children>
+
+        <ListView fx:id="listView" prefHeight="580" prefWidth="200"
+
+        />
+        <VBox>
+            <style>
+                -fx-alignment: center ;
+                -fx-padding: 5px;
+                -fx-border-insets: 5px;
+                -fx-background-insets: 5px;
+            </style>
+            <TextArea fx:id="textArea" prefHeight="100" prefWidth="300"></TextArea>
+
+            <Button fx:id="btnCompare" alignment="CENTER" text="Compare" />
+            <HBox>
+                <Label text="Pigeons count: " />
+                <Label fx:id="pigeonCount" text="00">
+                    <style>
+                        -fx-font-weight: bold;
+                        -fx-font-size: 14px;
+                    </style>
+                </Label>
+            </HBox>
+            <HBox alignment="BASELINE_CENTER">
+                <Label text="Pigeons found: " />
+                <Label fx:id="pigeonsFound" text="00" textFill="#f00">
+                    <style>
+                        -fx-font-weight: bold;
+                        -fx-font-size: 18px;
+                    </style>
+                </Label>
+            </HBox>
+
+        </VBox>
+
+        <ListView fx:id="pigeonsEquals" prefHeight="580" prefWidth="200" />
+
+    </children>
+
+
+</HBox>
