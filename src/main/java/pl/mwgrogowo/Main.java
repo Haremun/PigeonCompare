@@ -2,8 +2,10 @@ package pl.mwgrogowo;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +24,8 @@ public class Main extends Application {
   private List<String> pigeons;
   private List<String> equalsPigeons;
   private List<String> pigeonsFound;
+
+  private final PigeonService pigeonService = new PigeonService();
 
   @Override
   public void start(Stage primaryStage) throws Exception {
@@ -47,42 +51,34 @@ public class Main extends Application {
     btnCompare.setOnAction(event -> {
       equalsPigeons.clear();
 
-      BufferedReader bufferedReader = new BufferedReader(new StringReader(textArea.getText()));
-      String line;
-      int linesCount = 0;
       try {
-        line = bufferedReader.readLine();
-        while ((line = bufferedReader.readLine()) != null) {
-          String tmp = line.substring(29);
-          int tabIndex = tmp.indexOf("\t");
-          String finalString = tmp.substring(0, tabIndex);
-          System.out.println(finalString);
-          for (int i = 0; i < pigeons.size(); i++) {
-            if (pigeons.get(i).equals(finalString)) {
-              equalsPigeons.add(finalString);
-              pigeonsFound.add(finalString);
-              listView.refresh();
-              break;
-            }
-          }
-          linesCount++;
-        }
-        labelPigeonCount.setText(String.valueOf(linesCount));
+        List<PigeonDto> pigeonDtos = pigeonService.getPigeonInBasket();
+        pigeonDtos.forEach(pigeonDto -> {
+          pigeons.stream()
+              .filter(pigeon -> pigeonDto.getName().equals(pigeon))
+              .findFirst()
+              .ifPresent(pigeonName -> {
+                equalsPigeons.add(pigeonName);
+                pigeonsFound.add(pigeonName);
+                listView.refresh();
+              });
+        });
+        labelPigeonCount.setText(String.valueOf(pigeonDtos.size()));
         labelPigeonsFound.setText(String.valueOf(equalsPigeons.size()));
 
         ObservableList<String> observableListEquals = FXCollections.observableArrayList(equalsPigeons);
         listEqualsPigeons.setItems(observableListEquals);
 
-        textArea.selectAll();
-        textArea.requestFocus();
-      } catch (IOException ex) {
-        System.out.println(ex.getMessage());
+        textArea.setText(pigeonDtos.stream().map(pigeonDto -> String.format("%s | %s | %s", pigeonDto.getName(), pigeonDto.getDescription(), pigeonDto.getSurname())).collect(Collectors.joining()));
+      } catch (SQLException throwables) {
+        throwables.printStackTrace();
       }
+
 
     });
 
     try {
-      File file = new File("C:\\pigeons.txt");
+      File file = new File("/home/kamil/pigeons.txt");
       BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
       String st;
@@ -95,11 +91,43 @@ public class Main extends Application {
     } catch (IOException ex) {
       System.err.println(ex.getMessage());
     }
-
   }
-
 
   public static void main(String[] args) {
     launch(args);
   }
+
+//  void old(){
+//    BufferedReader bufferedReader = new BufferedReader(new StringReader(textArea.getText()));
+//    String line;
+//    int linesCount = 0;
+//    try {
+//      line = bufferedReader.readLine();
+//      while ((line = bufferedReader.readLine()) != null) {
+//        String tmp = line.substring(29);
+//        int tabIndex = tmp.indexOf("\t");
+//        String finalString = tmp.substring(0, tabIndex);
+//        System.out.println(finalString);
+//        for (int i = 0; i < pigeons.size(); i++) {
+//          if (pigeons.get(i).equals(finalString)) {
+//            equalsPigeons.add(finalString);
+//            pigeonsFound.add(finalString);
+//            listView.refresh();
+//            break;
+//          }
+//        }
+//        linesCount++;
+//      }
+//      labelPigeonCount.setText(String.valueOf(linesCount));
+//      labelPigeonsFound.setText(String.valueOf(equalsPigeons.size()));
+//
+//      ObservableList<String> observableListEquals = FXCollections.observableArrayList(equalsPigeons);
+//      listEqualsPigeons.setItems(observableListEquals);
+//
+//      textArea.selectAll();
+//      textArea.requestFocus();
+//    } catch (IOException ex) {
+//      System.out.println(ex.getMessage());
+//    }
+//  }
 }
