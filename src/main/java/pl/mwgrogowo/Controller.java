@@ -16,8 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
-
+x
 public class Controller implements Initializable {
   @FXML
   public ListView<String> listPigeonToFind;
@@ -35,11 +34,9 @@ public class Controller implements Initializable {
   public Label labelPigeonCount;
 
   private PigeonService pigeonService;
-  //List of all found pigeons
-  private final List<String> pigeonsFound = new ArrayList<>();
-  //List in this basket
-  private final List<String> pigeonsFoundInBasket = new ArrayList<>();
-  private final List<String> pigeons = new ArrayList<>();
+  private final List<String> allPigeonsFound = new ArrayList<>();
+  private final List<String> pigeonsFoundInCurrentBasket = new ArrayList<>();
+  private List<String> pigeonsToFind = new ArrayList<>();
   private List<PigeonDto> pigeonDtos = new ArrayList<>();
 
   public void setService(PigeonService pigeonService) {
@@ -48,8 +45,10 @@ public class Controller implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    listPigeonToFind.setCellFactory(param -> new PigeonsCell(pigeonsFound));
-    loadPigeons();
+    listPigeonToFind.setCellFactory(param -> new PigeonsCell(allPigeonsFound));
+    pigeonsToFind = loadPigeons();
+    ObservableList<String> observableList = FXCollections.observableArrayList(pigeonsToFind);
+    listPigeonToFind.setItems(observableList);
     btnCompare.setOnAction(this::onCompareButtonClick);
     btnLoad.setOnAction(this::onLoadButtonCLick);
   }
@@ -70,37 +69,41 @@ public class Controller implements Initializable {
 
   @FXML
   private void onCompareButtonClick(ActionEvent event) {
-    //pigeonsFoundInBasket.clear();
-    pigeonDtos.forEach(pigeonDto -> {
-      pigeons.stream()
-          .filter(pigeon -> pigeonDto.getName().equals(pigeon))
-          .findFirst()
-          .ifPresent(pigeonName -> {
-            pigeonsFoundInBasket.add(pigeonName);
-            pigeonsFound.add(pigeonName);
-            listPigeonToFind.refresh();
-          });
-    });
+    pigeonsFoundInCurrentBasket.clear();
+    pigeonDtos.forEach(pigeonDto ->
+        pigeonsToFind.stream()
+            .filter(pigeon -> pigeonDto.getName().equals(pigeon))
+            .findFirst()
+            .ifPresent(pigeonName -> {
+              pigeonsFoundInCurrentBasket.add(pigeonName);
+              allPigeonsFound.add(pigeonName);
+              listPigeonToFind.refresh();
+            }));
     labelPigeonCount.setText(String.valueOf(pigeonDtos.size()));
-    labelPigeonsFound.setText(String.valueOf(pigeonsFoundInBasket.size()));
+    labelPigeonsFound.setText(String.valueOf(pigeonsFoundInCurrentBasket.size()));
 
-    ObservableList<String> observableListEquals = FXCollections.observableArrayList(pigeonsFoundInBasket);
+    ObservableList<String> observableListEquals = FXCollections.observableArrayList(pigeonsFoundInCurrentBasket);
     listPigeonsFound.setItems(observableListEquals);
   }
-  private void loadPigeons(){
+
+  private List<String> loadPigeons() {
     try {
-      File file = new File("/home/kamil/pigeons.txt");
-      BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-
-      String st;
-      while ((st = br.readLine()) != null) {
-        pigeons.add(st);
-      }
-      ObservableList<String> observableList = FXCollections.observableArrayList(pigeons);
-      listPigeonToFind.setItems(observableList);
-
+      return loadPigeonsFromFile();
     } catch (IOException ex) {
       System.err.println(ex.getMessage());
+      return new ArrayList<>();
     }
+  }
+
+  private List<String> loadPigeonsFromFile() throws IOException {
+    List<String> pigeons = new ArrayList<>();
+    File file = new File("/home/kamil/pigeons.txt");
+    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+
+    String st;
+    while ((st = br.readLine()) != null) {
+      pigeons.add(st);
+    }
+    return pigeons;
   }
 }
