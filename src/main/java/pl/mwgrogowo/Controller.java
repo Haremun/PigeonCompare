@@ -75,7 +75,7 @@ public class Controller implements Initializable {
             .filter(pigeon -> pigeonDto.getName().equals(pigeon))
             .findFirst()
             .ifPresent(pigeonName -> {
-              pigeonsFoundInCurrentBasket.add(pigeonName);
+              pigeonsFoundInCurrentBasket.add(pigeonDto.toString());
               allPigeonsFound.add(pigeonName);
               listPigeonToFind.refresh();
             }));

@@ -78,7 +78,7 @@
          <children>
             <Label text="Pigeons found" />
 
-              <ListView fx:id="listPigeonsFound" prefHeight="580" prefWidth="200" />
+              <ListView fx:id="listPigeonsFound" prefHeight="580" prefWidth="410" />
          </children>
       </VBox>
 

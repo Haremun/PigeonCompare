@@ -28,4 +28,9 @@ public class PigeonDto {
   public String getSurname() {
     return surname;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s | %s | %s", name, description, surname);
+  }
 }
