@@ -1,5 +1,13 @@
-<?import javafx.scene.control.*?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.VBox?>
-<HBox fx:controller="pl.mwgrogowo.Controller" xmlns:fx="http://javafx.com/fxml" alignment="CENTER_LEFT">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER_LEFT" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
     <style>
         -fx-padding: 10;
         -fx-border-style: solid inside;
@@ -9,10 +17,25 @@
         -fx-border-color: blue;
     </style>
     <children>
+      <VBox>
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+         <children>
+            <Label text="Pigeons to find" />
 
-        <ListView fx:id="listView" prefHeight="580" prefWidth="200"
-
-        />
+              <ListView fx:id="listPigeonToFind" prefHeight="580" prefWidth="200" />
+         </children>
+      </VBox>
+      <VBox>
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+         <children>
+            <Label text="Pigeons in basket" />
+            <ListView fx:id="listBasketPigeons" prefHeight="580.0" prefWidth="200.0" />
+         </children>
+      </VBox>
         <VBox>
             <style>
                 -fx-alignment: center ;
@@ -20,12 +43,14 @@
                 -fx-border-insets: 5px;
                 -fx-background-insets: 5px;
             </style>
-            <TextArea fx:id="textArea" prefHeight="100" prefWidth="300"></TextArea>
-
-            <Button fx:id="btnCompare" alignment="CENTER" text="Compare" />
+         <Button fx:id="btnLoad" mnemonicParsing="false" text="Load">
+            <VBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </VBox.margin>
+         </Button>
             <HBox>
                 <Label text="Pigeons count: " />
-                <Label fx:id="pigeonCount" text="00">
+                <Label fx:id="labelPigeonCount" text="00">
                     <style>
                         -fx-font-weight: bold;
                         -fx-font-size: 14px;
@@ -34,7 +59,7 @@
             </HBox>
             <HBox alignment="BASELINE_CENTER">
                 <Label text="Pigeons found: " />
-                <Label fx:id="pigeonsFound" text="00" textFill="#f00">
+                <Label fx:id="labelPigeonsFound" text="00" textFill="#f00">
                     <style>
                         -fx-font-weight: bold;
                         -fx-font-size: 18px;
@@ -42,9 +67,20 @@
                 </Label>
             </HBox>
 
-        </VBox>
+                                 <Button fx:id="btnCompare" alignment="CENTER" text="Compare">
+            <VBox.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </VBox.margin>
+         </Button>
 
-        <ListView fx:id="pigeonsEquals" prefHeight="580" prefWidth="200" />
+        </VBox>
+      <VBox>
+         <children>
+            <Label text="Pigeons found" />
+
+              <ListView fx:id="listPigeonsFound" prefHeight="580" prefWidth="200" />
+         </children>
+      </VBox>
 
     </children>
 

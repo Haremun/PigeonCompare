@@ -8,31 +8,27 @@ import java.util.List;
 
 public class PigeonsCell extends ListCell<String> {
 
-    private List<String> pigeonsFound;
+  private List<String> pigeonsFound;
 
-    public PigeonsCell(List<String> pigeonsFound) {
-        this.pigeonsFound = pigeonsFound;
-        if (pigeonsFound == null)
-            this.pigeonsFound = new ArrayList<>();
-    }
+  public PigeonsCell(List<String> pigeonsFound) {
+    this.pigeonsFound = pigeonsFound;
+    if (pigeonsFound == null)
+      this.pigeonsFound = new ArrayList<>();
+  }
 
 
-    @Override
-    protected void updateItem(String item, boolean empty) {
-        super.updateItem(item, empty);
+  @Override
+  protected void updateItem(String item, boolean empty) {
+    super.updateItem(item, empty);
+    setText(item);
+    for (String pigeon : pigeonsFound) {
+      if (pigeon.equals(item)) {
+        setTextFill(Color.GREEN);
         setText(item);
-        for (String pigeon :
-                pigeonsFound) {
-            if (pigeon.equals(item)) {
-                setTextFill(Color.GREEN);
-                setText(item);
-                System.out.println(item);
-                break;
-            } else
-                setTextFill(Color.BLACK);
-
-        }
-
-
+        System.out.println(item);
+        break;
+      } else
+        setTextFill(Color.BLACK);
     }
+  }
 }
