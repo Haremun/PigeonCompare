@@ -97,7 +97,7 @@ public class Controller implements Initializable {
 
   private List<String> loadPigeonsFromFile() throws IOException {
     List<String> pigeons = new ArrayList<>();
-    File file = new File("/home/kamil/pigeons.txt");
+    File file = new File("C:\\pigeons.txt");
     BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
     String st;
